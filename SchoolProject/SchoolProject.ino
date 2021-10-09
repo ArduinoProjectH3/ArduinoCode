@@ -23,7 +23,9 @@ int status = WL_IDLE_STATUS; // wifi status
 char server[] = "192.168.1.71"; // web api ip-address
 int serverPort = 5001; // api port
 String queryString = "";
-String apiPath = "/api/PostData/PostRoomData";
+String apiPath = "/api/Arduino/Post";
+const String apiKeyValue = "JdYSNTTr5Lkf69M4gD7T5vJSLxqQXtvB";
+const String apiKeyId = "apiKey";
 
 WiFiClient client; // wifi client for http request
 
@@ -220,9 +222,12 @@ void PostRoomDataToApi(String roomName, float tempHead, float humHead, float tem
 
   queryString = String("?roomName=") + roomName + String("&tempHead=")+ String(tempHead) + String("&humHead=") + String(humHead);
   queryString = queryString + String("&tempFeet=") + String(tempFeet) + String("&soundStatus=") + soundStatus + String("&curtainStatus=") + curtainStatus + String("&lightStatus=") + lightStatus; 
+
+  int length = sizeof(queryString);
   
-  client.println("GET "+ apiPath + queryString + " HTTP/1.1");
+  client.println("POST "+ apiPath + queryString + " HTTP/1.1");
   client.println("Host: "+String(server)+":" + String(serverPort));
+  client.println("Content-Length:"+String(length));
   client.println("Connection: close");
   client.println();
 }
